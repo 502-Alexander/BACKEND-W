@@ -2,7 +2,6 @@
   "name": "salon-belleza-backend",
   "version": "1.0.0",
   "description": "Backend para el salón de belleza",
-  "type": "module",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
