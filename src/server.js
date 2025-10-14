@@ -1,4 +1,3 @@
-
 // Importar dependencias necesarias
 const express = require('express');
 const cors = require('cors');
@@ -11,122 +10,17 @@ const helmet = require('helmet');
 const expressSanitizer = require('express-sanitizer');
 require('dotenv').config();
 
-
-
-
 // Crear instancia de Express
-const usuarioRoutes = require('../routes/usuarioRoutes');
 const app = express();
 const PORT = process.env.PORT || 3002;
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret_change_in_production';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h';
 
-//==============================
-// Middlewares
-app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-  credentials: true
-}));
-app.use(express.json());
+// ===============================
+// CONFIGURACIÓN DE MIDDLEWARES
+// ===============================
 
-// Rutas reales con MySQL
-app.use('/api/usuarios', usuarioRoutes);
-
-// Importar y usar rutas de verificación por email
-const verificacionRoutes = require('../routes/verificacionRoutes');
-app.use('/api/verificacion', verificacionRoutes);
-
-// Importar y usar rutas de productos, categorías y carrito
-const productosRoutes = require('../routes/productosRoutes');
-const categoriasRoutes = require('../routes/categoriasRoutes');
-const carritoRoutes = require('../routes/carritoRoutes');
-
-app.use('/api/productos', productosRoutes);
-app.use('/api/categorias', categoriasRoutes);
-app.use('/api/carrito', carritoRoutes);
-
-// Ruta para servicios (para evitar el error 404)
-app.get('/api/servicios', (req, res) => {
-  const servicios = [
-    {
-      id: 1,
-      nombre: 'Corte de Cabello',
-      descripcion: 'Corte profesional personalizado',
-      precio: 15.00,
-      duracion: 60
-    },
-    {
-      id: 2,
-      nombre: 'Peinado',
-      descripcion: 'Peinado para ocasiones especiales',
-      precio: 25.00,
-      duracion: 90
-    },
-    {
-      id: 3,
-      nombre: 'Tinte y Coloración',
-      descripcion: 'Coloración profesional del cabello',
-      precio: 45.00,
-      duracion: 120
-    },
-    {
-      id: 4,
-      nombre: 'Manicure',
-      descripcion: 'Manicure completa con esmaltado',
-      precio: 20.00,
-      duracion: 60
-    },
-    {
-      id: 5,
-      nombre: 'Pedicure',
-      descripcion: 'Pedicure completa con esmaltado',
-      precio: 25.00,
-      duracion: 75
-    }
-  ];
-
-  res.json({
-    success: true,
-    data: servicios
-  });
-});
-
-// Ruta de registro (para compatibilidad con el frontend)
-app.post('/api/registro', (req, res) => {
-  try {
-    const { nombre, email, password } = req.body;
-    
-    if (!nombre || !email || !password) {
-      return res.status(400).json({ error: 'Todos los campos son requeridos' });
-    }
-
-    // Usar el controlador de usuarios que conecta con MySQL
-    const usuarioController = require('./controllers/usuarioController');
-    usuarioController.crearUsuario(req, res);
-  } catch (error) {
-    console.error('Error en registro:', error);
-    res.status(500).json({ error: 'Error al registrar usuario' });
-  }
-});
-
-// Ruta de prueba
-app.get('/', (req, res) => {
-  res.json({ message: '🟢 Servidor funcionando con MySQL' });
-});
-
-// Error 404
-app.use('*', (req, res) => {
-  res.status(404).json({ error: 'Ruta no encontrada' });
-});
-
-// Arrancar servidor
-app.listen(PORT, () => {
-  console.log(`🟢 Servidor Backend corriendo en http://localhost:${PORT}`);
-});
-//==============================
-
-
-// Middleware de seguridad
+// Middleware de seguridad Helmet
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
@@ -140,8 +34,8 @@ app.use(helmet({
 
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000, // 15 minutos
-  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100, // máximo 100 requests por IP
+  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000,
+  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100,
   message: {
     success: false,
     mensaje: 'Demasiadas solicitudes desde esta IP, intenta de nuevo más tarde.'
@@ -150,18 +44,19 @@ const limiter = rateLimit({
   legacyHeaders: false,
 });
 
-// Aplicar rate limiting a todas las rutas
 app.use('/api/', limiter);
 
-// Middleware para CORS y parsing de JSON
+// CORS
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:5175',
-  credentials: process.env.CORS_CREDENTIALS === 'true' || true
+  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  credentials: true
 }));
+
+// Parsing de JSON
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Sanitización de datos
+// Sanitización
 app.use(expressSanitizer());
 
 // Middleware de logging
@@ -171,106 +66,13 @@ app.use((req, res, next) => {
   next();
 });
 
-// Middleware de manejo de errores
-app.use((err, req, res, next) => {
-  console.error('Error:', err);
-  
-  // Error de validación
-  if (err.name === 'ValidationError') {
-    return res.status(400).json({
-      success: false,
-      mensaje: 'Error de validación',
-      error: err.message
-    });
-  }
-  
-  // Error de JWT
-  if (err.name === 'JsonWebTokenError') {
-    return res.status(401).json({
-      success: false,
-      mensaje: 'Token inválido'
-    });
-  }
-  
-  // Error de expiración de JWT
-  if (err.name === 'TokenExpiredError') {
-    return res.status(401).json({
-      success: false,
-      mensaje: 'Token expirado'
-    });
-  }
-  
-  // Error genérico
-  res.status(500).json({
-    success: false,
-    mensaje: 'Error interno del servidor',
-    error: process.env.NODE_ENV === 'development' ? err.message : 'Error interno'
-  });
-});
+// ===============================
+// DATOS DE EJEMPLO
+// ===============================
 
-// Datos de ejemplo para productos (en un proyecto real vendría de una base de datos)
-const productos = [
-  {
-    id: 1,
-    nombre: "Laptop Gaming Pro",
-    precio: 1299.99,
-    descripcion: "Laptop de alto rendimiento para gaming y trabajo profesional",
-    imagen: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400",
-    categoria: "Electrónicos",
-    stock: 15
-  },
-  {
-    id: 2,
-    nombre: "Smartphone Ultra",
-    precio: 899.99,
-    descripcion: "Teléfono inteligente con cámara de 108MP y pantalla 4K",
-    imagen: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400",
-    categoria: "Electrónicos",
-    stock: 25
-  },
-  {
-    id: 3,
-    nombre: "Auriculares Inalámbricos",
-    precio: 199.99,
-    descripcion: "Auriculares con cancelación de ruido y sonido de alta calidad",
-    imagen: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400",
-    categoria: "Audio",
-    stock: 40
-  },
-  {
-    id: 4,
-    nombre: "Reloj Inteligente",
-    precio: 299.99,
-    descripcion: "Smartwatch con monitoreo de salud y GPS integrado",
-    imagen: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400",
-    categoria: "Wearables",
-    stock: 20
-  },
-  {
-    id: 5,
-    nombre: "Tablet Pro",
-    precio: 599.99,
-    descripcion: "Tablet profesional con pantalla de 12 pulgadas y stylus incluido",
-    imagen: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400",
-    categoria: "Electrónicos",
-    stock: 12
-  },
-  {
-    id: 6,
-    nombre: "Cámara Digital",
-    precio: 799.99,
-    descripcion: "Cámara mirrorless con sensor de 24MP y grabación 4K",
-    imagen: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=400",
-    categoria: "Fotografía",
-    stock: 8
-  }
-];
-
-// Array para simular carrito de compras (en producción se usaría una base de datos)
-let carrito = [];
-
-// Arrays para simular base de datos (en producción se usaría una base de datos real)
+// Arrays para simular base de datos
 let usuarios = [];
+let carrito = [];
 let citas = [];
 let reportes = {
   ventas: [],
@@ -279,7 +81,6 @@ let reportes = {
   citas: []
 };
 
-// Array para gestión de citas del salón
 let citasSalon = [
   {
     id: '1',
@@ -327,28 +128,6 @@ let citasSalon = [
     fechaActualizacion: '2024-01-26T12:00:00Z'
   }
 ];
-
-// Servicios disponibles en el salón
-const serviciosDisponibles = [
-  'Corte y Peinado',
-  'Tinte y Tratamiento',
-  'Manicure y Pedicure',
-  'Maquillaje',
-  'Tratamiento Facial',
-  'Depilación',
-  'Peinado para Eventos',
-  'Tratamiento Capilar'
-];
-
-// Configuración de citas
-const configuracionCitas = {
-  maxCitasPorDia: 3,
-  diasExcluidos: [0], // 0 = Domingo
-  horariosDisponibles: [
-    '09:00', '10:00', '11:00', '12:00',
-    '14:00', '15:00', '16:00', '17:00'
-  ]
-};
 
 // Array para gestión de stock
 let stock = [
@@ -417,46 +196,90 @@ let stock = [
   }
 ];
 
-// Función para inicializar el administrador por defecto
-async function inicializarAdmin() {
-  try {
-    console.log('Inicializando administrador...');
-    console.log('Usuarios actuales:', usuarios.length);
-    
-    // Verificar si ya existe un admin
-    const adminExistente = usuarios.find(u => u.rol === 'admin');
-    
-    if (!adminExistente) {
-      console.log('Creando nuevo administrador...');
-      // Generar hash para la contraseña "password"
-      const hashedPassword = await bcrypt.hash('password', 10);
-      
-      const adminDefault = {
-        id: 'admin',
-        usuario: 'admin',
-        email: 'admin@nuevatienda.com',
-        password: hashedPassword,
-        rol: 'admin',
-        nombre: 'Administrador',
-        fechaRegistro: new Date()
-      };
-      
-      usuarios.push(adminDefault);
-      console.log('✅ Usuario administrador creado exitosamente');
-      console.log('👤 Usuario: admin');
-      console.log('🔑 Contraseña: password');
-      console.log('Total usuarios:', usuarios.length);
-    } else {
-      console.log('✅ Usuario administrador ya existe');
-      console.log('👤 Usuario:', adminExistente.usuario);
-      console.log('Total usuarios:', usuarios.length);
-    }
-  } catch (error) {
-    console.error(' Error al inicializar administrador:', error);
+// Datos de ejemplo para productos
+const productos = [
+  {
+    id: 1,
+    nombre: "Laptop Gaming Pro",
+    precio: 1299.99,
+    descripcion: "Laptop de alto rendimiento para gaming y trabajo profesional",
+    imagen: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400",
+    categoria: "Electrónicos",
+    stock: 15
+  },
+  {
+    id: 2,
+    nombre: "Smartphone Ultra",
+    precio: 899.99,
+    descripcion: "Teléfono inteligente con cámara de 108MP y pantalla 4K",
+    imagen: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400",
+    categoria: "Electrónicos",
+    stock: 25
+  },
+  {
+    id: 3,
+    nombre: "Auriculares Inalámbricos",
+    precio: 199.99,
+    descripcion: "Auriculares con cancelación de ruido y sonido de alta calidad",
+    imagen: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400",
+    categoria: "Audio",
+    stock: 40
+  },
+  {
+    id: 4,
+    nombre: "Reloj Inteligente",
+    precio: 299.99,
+    descripcion: "Smartwatch con monitoreo de salud y GPS integrado",
+    imagen: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400",
+    categoria: "Wearables",
+    stock: 20
+  },
+  {
+    id: 5,
+    nombre: "Tablet Pro",
+    precio: 599.99,
+    descripcion: "Tablet profesional con pantalla de 12 pulgadas y stylus incluido",
+    imagen: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400",
+    categoria: "Electrónicos",
+    stock: 12
+  },
+  {
+    id: 6,
+    nombre: "Cámara Digital",
+    precio: 799.99,
+    descripcion: "Cámara mirrorless con sensor de 24MP y grabación 4K",
+    imagen: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=400",
+    categoria: "Fotografía",
+    stock: 8
   }
-}
+];
 
-// Middleware para verificar JWT
+// Servicios disponibles en el salón
+const serviciosDisponibles = [
+  'Corte y Peinado',
+  'Tinte y Tratamiento',
+  'Manicure y Pedicure',
+  'Maquillaje',
+  'Tratamiento Facial',
+  'Depilación',
+  'Peinado para Eventos',
+  'Tratamiento Capilar'
+];
+
+// Configuración de citas
+const configuracionCitas = {
+  maxCitasPorDia: 3,
+  diasExcluidos: [0], // 0 = Domingo
+  horariosDisponibles: [
+    '09:00', '10:00', '11:00', '12:00',
+    '14:00', '15:00', '16:00', '17:00'
+  ]
+};
+
+// ===============================
+// MIDDLEWARE DE VERIFICACIÓN JWT
+// ===============================
+
 const verificarToken = (req, res, next) => {
   const token = req.header('Authorization')?.replace('Bearer ', '');
   
@@ -479,7 +302,6 @@ const verificarToken = (req, res, next) => {
   }
 };
 
-// Middleware para verificar rol de administrador
 const verificarAdmin = (req, res, next) => {
   if (req.usuario.rol !== 'admin') {
     return res.status(403).json({
@@ -490,17 +312,62 @@ const verificarAdmin = (req, res, next) => {
   next();
 };
 
-// Ruta principal - información de la API
+// ===============================
+// RUTAS PRINCIPALES
+// ===============================
+
+// Ruta principal
 app.get('/', (req, res) => {
-  res.json({
-    mensaje: 'API de Nueva Tienda funcionando correctamente',
+  res.json({ 
+    message: '🟢 Servidor funcionando correctamente',
     version: '1.0.0',
-    endpoints: {
-      productos: '/api/productos',
-      carrito: '/api/carrito',
-      categorias: '/api/categorias',
-      auth: '/api/auth'
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
+
+// Ruta de servicios
+app.get('/api/servicios', (req, res) => {
+  const servicios = [
+    {
+      id: 1,
+      nombre: 'Corte de Cabello',
+      descripcion: 'Corte profesional personalizado',
+      precio: 15.00,
+      duracion: 60
+    },
+    {
+      id: 2,
+      nombre: 'Peinado',
+      descripcion: 'Peinado para ocasiones especiales',
+      precio: 25.00,
+      duracion: 90
+    },
+    {
+      id: 3,
+      nombre: 'Tinte y Coloración',
+      descripcion: 'Coloración profesional del cabello',
+      precio: 45.00,
+      duracion: 120
+    },
+    {
+      id: 4,
+      nombre: 'Manicure',
+      descripcion: 'Manicure completa con esmaltado',
+      precio: 20.00,
+      duracion: 60
+    },
+    {
+      id: 5,
+      nombre: 'Pedicure',
+      descripcion: 'Pedicure completa con esmaltado',
+      precio: 25.00,
+      duracion: 75
     }
+  ];
+
+  res.json({
+    success: true,
+    data: servicios
   });
 });
 
@@ -518,9 +385,9 @@ app.get('/api/debug/usuarios', (req, res) => {
   });
 });
 
-// ================================
+// ===============================
 // RUTAS DE GESTIÓN DE STOCK
-// ================================
+// ===============================
 
 // Obtener todo el stock
 app.get('/api/stock', verificarToken, (req, res) => {
@@ -829,6 +696,10 @@ app.get('/api/stock/estadisticas', verificarToken, (req, res) => {
   }
 });
 
+// ===============================
+// RUTAS DE PRODUCTOS Y CARRITO
+// ===============================
+
 // Ruta para obtener todos los productos
 app.get('/api/productos', (req, res) => {
   try {
@@ -1033,7 +904,9 @@ app.delete('/api/carrito', (req, res) => {
   }
 });
 
-// ==================== RUTAS DE AUTENTICACIÓN ====================
+// ===============================
+// RUTAS DE AUTENTICACIÓN
+// ===============================
 
 // Ruta para registro de usuarios
 app.post('/api/auth/registro', [
@@ -1198,21 +1071,14 @@ app.post('/api/auth/admin-login', [
 
     const { usuario: usuarioInput, password } = req.body;
 
-    // Debug: Mostrar usuarios disponibles
-    console.log('Usuarios disponibles:', usuarios.map(u => ({ usuario: u.usuario, rol: u.rol })));
-    console.log('Buscando admin con usuario:', usuarioInput);
-    
     // Buscar administrador
     const admin = usuarios.find(u => u.usuario === usuarioInput && u.rol === 'admin');
     if (!admin) {
-      console.log('No se encontró administrador con usuario:', usuarioInput);
       return res.status(401).json({
         success: false,
         mensaje: 'Credenciales de administrador inválidas'
       });
     }
-    
-    console.log('Administrador encontrado:', { usuario: admin.usuario, rol: admin.rol });
 
     // Verificar contraseña
     const passwordValida = await bcrypt.compare(password, admin.password);
@@ -1256,7 +1122,9 @@ app.post('/api/auth/admin-login', [
   }
 });
 
-// ==================== RUTAS DEL DASHBOARD ADMINISTRATIVO ====================
+// ===============================
+// RUTAS DEL DASHBOARD ADMINISTRATIVO
+// ===============================
 
 // Ruta para obtener estadísticas generales del dashboard
 app.get('/api/admin/dashboard', verificarToken, verificarAdmin, (req, res) => {
@@ -1592,9 +1460,9 @@ app.get('/api/admin/clientes', verificarToken, verificarAdmin, (req, res) => {
   }
 });
 
-// ================================
+// ===============================
 // RUTAS DE GESTIÓN DE CITAS DEL SALÓN
-// ================================
+// ===============================
 
 // Obtener todas las citas
 app.get('/api/citas', verificarToken, (req, res) => {
@@ -1982,7 +1850,44 @@ app.post('/api/citas/:id/foto', verificarToken, (req, res) => {
   }
 });
 
-// Middleware para manejar rutas no encontradas
+// ===============================
+// MIDDLEWARES FINALES
+// ===============================
+
+// Middleware de manejo de errores
+app.use((err, req, res, next) => {
+  console.error('Error:', err);
+  
+  if (err.name === 'ValidationError') {
+    return res.status(400).json({
+      success: false,
+      mensaje: 'Error de validación',
+      error: err.message
+    });
+  }
+  
+  if (err.name === 'JsonWebTokenError') {
+    return res.status(401).json({
+      success: false,
+      mensaje: 'Token inválido'
+    });
+  }
+  
+  if (err.name === 'TokenExpiredError') {
+    return res.status(401).json({
+      success: false,
+      mensaje: 'Token expirado'
+    });
+  }
+  
+  res.status(500).json({
+    success: false,
+    mensaje: 'Error interno del servidor',
+    error: process.env.NODE_ENV === 'development' ? err.message : 'Error interno'
+  });
+});
+
+// Middleware para rutas no encontradas
 app.use('*', (req, res) => {
   res.status(404).json({
     success: false,
@@ -1990,10 +1895,48 @@ app.use('*', (req, res) => {
   });
 });
 
-// Iniciar servidor
+// ===============================
+// INICIALIZACIÓN Y ARRANQUE DEL SERVIDOR
+// ===============================
+
+// Función para inicializar administrador
+async function inicializarAdmin() {
+  try {
+    console.log('Inicializando administrador...');
+    
+    const adminExistente = usuarios.find(u => u.rol === 'admin');
+    
+    if (!adminExistente) {
+      console.log('Creando nuevo administrador...');
+      const hashedPassword = await bcrypt.hash('password', 10);
+      
+      const adminDefault = {
+        id: 'admin',
+        usuario: 'admin',
+        email: 'admin@nuevatienda.com',
+        password: hashedPassword,
+        rol: 'admin',
+        nombre: 'Administrador',
+        fechaRegistro: new Date()
+      };
+      
+      usuarios.push(adminDefault);
+      console.log('✅ Usuario administrador creado exitosamente');
+      console.log('👤 Usuario: admin');
+      console.log('🔑 Contraseña: password');
+    } else {
+      console.log('✅ Usuario administrador ya existe');
+    }
+  } catch (error) {
+    console.error('Error al inicializar administrador:', error);
+  }
+}
+
+// SOLO UNA LLAMADA A APP.LISTEN()
 app.listen(PORT, async () => {
   console.log(`🚀 Servidor backend ejecutándose en http://localhost:${PORT}`);
   console.log(`📱 API disponible en http://localhost:${PORT}/api`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
   
   // Inicializar administrador por defecto
   await inicializarAdmin();
