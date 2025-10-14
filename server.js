@@ -3,6 +3,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const usuarioRoutes = require('./routes/usuarioRoutes');
+const usuarioController = require('./controllers/usuarioController'); // Movido al inicio
 
 const app = express();
 
@@ -25,9 +26,7 @@ app.post('/api/registro', (req, res) => {
       return res.status(400).json({ error: 'Todos los campos son requeridos' });
     }
 
-    // Usar el controlador de usuarios que conecta con MySQL
-    const usuarioController = require('./controllers/usuarioController');
-    usuarioController.crearUsuario(req, res);
+    usuarioController.crearUsuario(req, res); // Solo llamamos al controlador
   } catch (error) {
     console.error('Error en registro:', error);
     res.status(500).json({ error: 'Error al registrar usuario' });
@@ -44,8 +43,8 @@ app.use('*', (req, res) => {
   res.status(404).json({ error: 'Ruta no encontrada' });
 });
 
-// Arrancar servidor
+// Arrancar servidor usando el puerto dinámico de Render
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`🟢 Servidor Backend corriendo en http://localhost:${PORT}`);
+  console.log(`🟢 Servidor Backend corriendo en el puerto ${PORT}`);
 });
