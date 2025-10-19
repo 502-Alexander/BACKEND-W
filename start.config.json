@@ -1,0 +1,35 @@
+{
+  "project": {
+    "name": "Nueva Tienda - Salón Sandra Fajardo",
+    "version": "1.0.0",
+    "description": "Sistema completo de e-commerce y gestión para salón de belleza"
+  },
+  "services": {
+    "backend": {
+      "port": 4000,
+      "directory": "backend",
+      "script": "dev",
+      "name": "BACKEND",
+      "color": "bgBlue.bold"
+    },
+    "frontend": {
+      "port": 5173,
+      "directory": "frontend", 
+      "script": "dev",
+      "name": "FRONTEND",
+      "color": "cyan"
+    }
+  },
+  "urls": {
+    "frontend": "http://localhost:5173",
+    "backend": "http://localhost:4000",
+    "api": "http://localhost:4000/api"
+  },
+  "checks": {
+    "checkDependencies": true,
+    "checkEnvFile": true,
+    "checkStructure": true
+  }
+}
+
+
