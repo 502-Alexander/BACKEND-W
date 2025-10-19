@@ -1,8 +1,9 @@
 // Servicio de email para envío de correos de verificación
 // Este archivo maneja toda la configuración y envío de correos electrónicos
 
-const nodemailer = require('nodemailer');
-require('dotenv').config();
+import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+dotenv.config();
 
 // Configuración del transporter de Nodemailer
 // Este objeto se encarga de la conexión con el servidor de email
@@ -34,7 +35,7 @@ const verificarConexion = async () => {
 const enviarCorreoVerificacion = async (email, nombre, token) => {
   try {
     // URL de verificación que se enviará al usuario
-    const urlVerificacion = `${process.env.FRONTEND_URL}/verificar-email?token=${token}`;
+    const urlVerificacion = `http://localhost:5173/verificar-email?token=${token}`;
     
     // Configuración del correo
     const mailOptions = {
@@ -47,20 +48,27 @@ const enviarCorreoVerificacion = async (email, nombre, token) => {
         <head>
           <meta charset="utf-8">
           <style>
-            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
             .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #D6BB89 0%, #e8d4a8 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+            .header { background: #081D3D; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; position: relative; }
+            .logo-container { display: flex; align-items: center; justify-content: center; margin-bottom: 15px; }
+            .logo-img { width: 60px; height: 60px; margin-right: 15px; border-radius: 50%; box-shadow: 0 2px 8px rgba(0,0,0,0.2); border: 2px solid #f0e6d6; }
+            .logo-text { color: #f0e6d6; font-size: 24px; font-weight: bold; }
+            .tagline { color: #f0e6d6; margin: 10px 0 0 0; font-size: 16px; }
             .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
-            .btn { display: inline-block; background: #a6522c; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+            .btn { display: inline-block; background: #f0e6d6; color: #000000; padding: 15px 30px; text-decoration: none; border-radius: 5px; margin: 20px 0; font-weight: bold; border: 2px solid #f0e6d6; transition: all 0.3s ease; }
+            .btn:hover { background: #e8d4a8; border-color: #e8d4a8; }
             .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
-            .logo { font-size: 24px; font-weight: bold; color: #2d5a3d; }
           </style>
         </head>
         <body>
           <div class="container">
             <div class="header">
-              <div class="logo">Salón Sandra Fajardo</div>
-              <p style="margin: 10px 0 0 0; color: #2d5a3d;">Belleza y elegancia en cada detalle</p>
+              <div class="logo-container">
+                <img src="http://localhost:4000/uploads/logo.jpg" alt="Salón Sandra Fajardo" class="logo-img" style="object-fit: cover;">
+                <div class="logo-text">Salón Sandra Fajardo</div>
+              </div>
+              <p class="tagline">Belleza y elegancia en cada detalle</p>
             </div>
             <div class="content">
               <h2>¡Hola ${nombre}!</h2>
@@ -117,19 +125,25 @@ const enviarCorreoBienvenida = async (email, nombre) => {
         <head>
           <meta charset="utf-8">
           <style>
-            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
             .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: linear-gradient(135deg, #D6BB89 0%, #e8d4a8 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+            .header { background: #081D3D; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; position: relative; }
+            .logo-container { display: flex; align-items: center; justify-content: center; margin-bottom: 15px; }
+            .logo-img { width: 60px; height: 60px; margin-right: 15px; border-radius: 50%; box-shadow: 0 2px 8px rgba(0,0,0,0.2); border: 2px solid #f0e6d6; }
+            .logo-text { color: #f0e6d6; font-size: 24px; font-weight: bold; }
+            .tagline { color: #f0e6d6; margin: 10px 0 0 0; font-size: 16px; }
             .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
             .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
-            .logo { font-size: 24px; font-weight: bold; color: #2d5a3d; }
           </style>
         </head>
         <body>
           <div class="container">
             <div class="header">
-              <div class="logo">Salón Sandra Fajardo</div>
-              <p style="margin: 10px 0 0 0; color: #2d5a3d;">Belleza y elegancia en cada detalle</p>
+              <div class="logo-container">
+                <img src="http://localhost:4000/uploads/logo.jpg" alt="Salón Sandra Fajardo" class="logo-img" style="object-fit: cover;">
+                <div class="logo-text">Salón Sandra Fajardo</div>
+              </div>
+              <p class="tagline">Belleza y elegancia en cada detalle</p>
             </div>
             <div class="content">
               <h2>¡Bienvenido ${nombre}!</h2>
@@ -163,9 +177,103 @@ const enviarCorreoBienvenida = async (email, nombre) => {
   }
 };
 
+// Función para enviar correo de confirmación de inicio de sesión
+// Se llama cuando un usuario inicia sesión exitosamente
+const enviarCorreoInicioSesion = async (email, nombre, fechaHora) => {
+  try {
+    const mailOptions = {
+      from: `"Salón Sandra Fajardo" <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: '🔐 Confirmación de inicio de sesión - Salón Sandra Fajardo',
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: #081D3D; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+            .logo-container { display: flex; align-items: center; justify-content: center; margin-bottom: 15px; }
+            .logo-img { width: 60px; height: 60px; margin-right: 15px; border-radius: 50%; box-shadow: 0 2px 8px rgba(0,0,0,0.2); border: 2px solid #f0e6d6; }
+            .logo-text { color: #f0e6d6; font-size: 24px; font-weight: bold; }
+            .tagline { color: #f0e6d6; margin: 10px 0 0 0; font-size: 16px; }
+            .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
+            .alert-box { background: #e8f5e8; border: 2px solid #4caf50; padding: 20px; border-radius: 8px; margin: 20px 0; }
+            .info-box { background: #f0f8ff; border: 2px solid #2196f3; padding: 15px; border-radius: 8px; margin: 15px 0; }
+            .footer { text-align: center; margin-top: 30px; color: #666; font-size: 14px; }
+            .btn { display: inline-block; background: #f0e6d6; color: #000000; padding: 12px 25px; text-decoration: none; border-radius: 5px; margin: 15px 0; font-weight: bold; border: 2px solid #f0e6d6; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <div class="logo-container">
+                <img src="http://localhost:4000/uploads/logo.jpg" alt="Salón Sandra Fajardo" class="logo-img" style="object-fit: cover;">
+                <div class="logo-text">Salón Sandra Fajardo</div>
+              </div>
+              <p class="tagline">Belleza y elegancia en cada detalle</p>
+            </div>
+            <div class="content">
+              <h2>🔐 Confirmación de inicio de sesión</h2>
+              
+              <div class="alert-box">
+                <h3>✅ Inicio de sesión exitoso</h3>
+                <p>Hola <strong>${nombre}</strong>,</p>
+                <p>Se ha iniciado sesión en tu cuenta del Salón Sandra Fajardo.</p>
+              </div>
+              
+              <div class="info-box">
+                <h4>📋 Detalles del acceso:</h4>
+                <ul>
+                  <li><strong>Fecha y hora:</strong> ${fechaHora}</li>
+                </ul>
+              </div>
+              
+              <p><strong>¿No fuiste tú?</strong></p>
+              <p>Si no iniciaste sesión en tu cuenta, te recomendamos:</p>
+              <ul>
+                <li>Cambiar tu contraseña inmediatamente</li>
+                <li>Revisar la actividad reciente de tu cuenta</li>
+                <li>Contactarnos si tienes dudas</li>
+              </ul>
+              
+              <div style="text-align: center;">
+                <a href="http://localhost:5173" class="btn">Ir a la Tienda en Línea</a>
+              </div>
+              
+              <p><strong>Consejos de seguridad:</strong></p>
+              <ul>
+                <li>Nunca compartas tu contraseña</li>
+                <li>Cierra sesión en dispositivos públicos</li>
+                <li>Usa contraseñas seguras y únicas</li>
+                <li>Habilita la autenticación de dos factores si está disponible</li>
+              </ul>
+            </div>
+            <div class="footer">
+              <p>Salón Sandra Fajardo - Belleza y elegancia en cada detalle</p>
+              <p>Este es un correo automático de seguridad, por favor no respondas</p>
+            </div>
+          </div>
+        </body>
+        </html>
+      `
+    };
+
+    const info = await transporter.sendMail(mailOptions);
+    console.log('✅ Correo de inicio de sesión enviado:', info.messageId);
+    return { success: true, messageId: info.messageId };
+    
+  } catch (error) {
+    console.error('❌ Error al enviar correo de inicio de sesión:', error.message);
+    return { success: false, error: error.message };
+  }
+};
+
 // Exportar las funciones para usar en otros archivos
-module.exports = {
+export {
   verificarConexion,
   enviarCorreoVerificacion,
-  enviarCorreoBienvenida
+  enviarCorreoBienvenida,
+  enviarCorreoInicioSesion
 };

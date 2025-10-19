@@ -1,7 +1,7 @@
 // Modelo para manejar tokens de verificación en la base de datos
 // Este archivo contiene todas las operaciones relacionadas con tokens de verificación
 
-const db = require('../database/ConexionBDD');
+import db from '../database/ConexionBDD.js';
 
 // Objeto que contiene todas las funciones para manejar tokens
 const Token = {
@@ -49,4 +49,4 @@ const Token = {
 };
 
 // Exportar el modelo para usar en otros archivos
-module.exports = Token;
+export default Token;

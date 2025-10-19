@@ -1,11 +1,11 @@
 // Controlador para manejar la verificación de email
 // Este archivo contiene todas las funciones relacionadas con la verificación de cuentas
 
-const Usuario = require('../models/usuarioModel');
-const Token = require('../models/tokenModel');
-const emailService = require('../services/emailService');
-const crypto = require('crypto'); // Para generar tokens seguros
-const bcrypt = require('bcryptjs'); // Para hashear contraseñas
+import Usuario from '../models/usuarioModel.js';
+import Token from '../models/tokenModel.js';
+import { enviarCorreoVerificacion, enviarCorreoBienvenida } from '../services/emailService.js';
+import crypto from 'crypto'; // Para generar tokens seguros
+import bcrypt from 'bcryptjs'; // Para hashear contraseñas
 
 // Función para registrar un nuevo usuario y enviar correo de verificación
 // Esta función reemplaza el registro simple anterior
@@ -87,7 +87,7 @@ const registrarUsuario = async (req, res) => {
             }
 
             // Enviar correo de verificación
-            const emailResult = await emailService.enviarCorreoVerificacion(email, nombre, token);
+            const emailResult = await enviarCorreoVerificacion(email, nombre, token);
 
             if (emailResult.success) {
               res.status(201).json({
@@ -192,7 +192,7 @@ const verificarEmail = async (req, res) => {
             const usuario = usuarios[0];
 
             // Enviar correo de bienvenida
-            await emailService.enviarCorreoBienvenida(usuario.email, usuario.nombre);
+            await enviarCorreoBienvenida(usuario.email, usuario.nombre);
 
             res.json({
               success: true,
@@ -289,7 +289,7 @@ const reenviarVerificacion = async (req, res) => {
           }
 
           // Enviar nuevo correo de verificación
-          const emailResult = await emailService.enviarCorreoVerificacion(usuario.email, usuario.nombre, token);
+          const emailResult = await enviarCorreoVerificacion(usuario.email, usuario.nombre, token);
 
           if (emailResult.success) {
             res.json({
@@ -315,7 +315,7 @@ const reenviarVerificacion = async (req, res) => {
 };
 
 // Exportar las funciones del controlador
-module.exports = {
+export default {
   registrarUsuario,
   verificarEmail,
   reenviarVerificacion

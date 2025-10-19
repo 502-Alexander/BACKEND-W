@@ -1,39 +1,40 @@
 {
-  "name": "nueva-tienda",
+  "name": "salon-belleza-backend",
   "version": "1.0.0",
-  "description": "Tienda en línea profesional con React, Node.js y Vite",
-  "main": "index.js",
+  "description": "Backend para el salón de belleza",
+  "type": "module",
+  "main": "src/server.js",
   "scripts": {
-    "dev": "node start.js",
-    "start": "npm run dev",
-    "dev:simple": "concurrently --kill-others --prefix-colors \"bgBlue.bold,cyan\" \"npm run server\" \"npm run client\"",
-    "dev:win": "start.bat",
-    "dev:ps": "powershell -ExecutionPolicy Bypass -File start.ps1",
-    "server": "cd backend; npm run dev",
-    "client": "cd frontend; npm run dev",
-    "install-all": "npm install; cd backend; npm install; cd ../frontend; npm install",
-    "build": "cd frontend; npm run build",
-    "build:backend": "cd backend; npm run build",
-    "test": "cd backend; npm test; cd ../frontend; npm test",
-    "test:frontend": "cd frontend; npm test",
-    "test:backend": "cd backend; npm test",
-    "lint": "cd frontend; npm run lint",
-    "clean": "rm -rf node_modules backend/node_modules frontend/node_modules",
-    "reset": "npm run clean; npm run install-all"
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "tienda",
-    "ecommerce",
-    "react",
-    "nodejs",
-    "vite"
+    "salon",
+    "belleza",
+    "backend",
+    "api"
   ],
-  "author": "Tu Nombre",
-  "license": "MIT",
-  "devDependencies": {
-    "concurrently": "^8.2.2"
-  },
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "pg": "^8.16.3"
+    "axios": "^1.12.2",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.2",
+    "express": "^4.18.2",
+    "express-rate-limit": "^8.1.0",
+    "express-sanitizer": "^1.0.6",
+    "express-validator": "^7.2.1",
+    "form-data": "^4.0.4",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.2",
+    "mysql2": "^3.15.2",
+    "nodemailer": "^7.0.6",
+    "sharp": "^0.34.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }

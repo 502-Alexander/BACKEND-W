@@ -1,12 +1,17 @@
-
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const usuarioController = require('../controllers/usuarioController');
 
-// GET: Instrucción para obtener todos los usuarios
-router.get('/', usuarioController.obtenerUsuarios);
+// Importamos el controller de usuarios
+import UsuarioController from '../controllers/usuarioController.js';
 
-// POST: Instruccion para crear un nuevo usuario
-router.post('/', usuarioController.crearUsuario);
+// --- Rutas de usuarios ---
+// GET /api/usuarios → obtener todos los usuarios
+router.get('/', UsuarioController.obtenerUsuarios);
 
-module.exports = router;
+// POST /api/usuarios/crear → crear nuevo usuario
+router.post('/crear', UsuarioController.crearUsuario);
+    
+// POST /api/auth/admin-login → MOVIDO A server.js para simplificar
+
+// Exportamos las rutas para usar en server.js
+export default router;

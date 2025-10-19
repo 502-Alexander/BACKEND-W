@@ -1,10 +1,10 @@
 // Rutas para el sistema de verificación por email
 // Este archivo define todas las rutas relacionadas con la verificación de cuentas
 
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const verificacionController = require('../controllers/verificacionController');
-const { body, validationResult } = require('express-validator');
+import verificacionController from '../controllers/verificacionController.js';
+import { body, validationResult } from 'express-validator';
 
 // Ruta para registrar un nuevo usuario (con verificación por email)
 // POST /api/verificacion/registro
@@ -45,4 +45,4 @@ router.post('/reenviar', [
 ], verificacionController.reenviarVerificacion);
 
 // Exportar el router para usar en el servidor principal
-module.exports = router;
+export default router;

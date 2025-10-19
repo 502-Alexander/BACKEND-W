@@ -1,98 +1,61 @@
-// Rutas para el carrito de compras
-const express = require('express');
+import express from 'express';
 const router = express.Router();
+import CarritoController from '../controllers/carritoController.js';
 
-// Array temporal para almacenar carritos (en producción usar base de datos)
-let carritos = {};
+// ===== RUTAS DEL CARRITO =====
 
-// Ruta para obtener el carrito de un usuario
-router.get('/:usuarioId', (req, res) => {
-  const { usuarioId } = req.params;
-  
-  if (!carritos[usuarioId]) {
-    carritos[usuarioId] = {
-      items: [],
-      total: 0,
-      cantidad: 0
-    };
+// Middleware simple para validar :cliente_id numérico
+function validarClienteId(req, res, next) {
+  const { cliente_id } = req.params;
+  const idNum = Number(cliente_id);
+  if (!Number.isFinite(idNum)) {
+    return res.status(400).json({ success: false, mensaje: 'cliente_id inválido' });
   }
+  req.params.cliente_id = idNum;
+  next();
+}
 
-  res.json({
-    success: true,
-    data: carritos[usuarioId]
-  });
+// GET /api/carrito/:cliente_id - Obtener carrito de un usuario
+router.get('/:cliente_id', validarClienteId, (req, res, next) => {
+  // Reutilizamos el controlador usando la misma firma interna (usuario_id)
+  req.params.usuario_id = req.params.cliente_id;
+  return CarritoController.obtenerCarrito(req, res, next);
 });
 
-// Ruta para agregar producto al carrito
-router.post('/:usuarioId/agregar', (req, res) => {
-  const { usuarioId } = req.params;
-  const { productoId, cantidad = 1 } = req.body;
-
-  if (!carritos[usuarioId]) {
-    carritos[usuarioId] = {
-      items: [],
-      total: 0,
-      cantidad: 0
-    };
-  }
-
-  // Buscar si el producto ya está en el carrito
-  const itemExistente = carritos[usuarioId].items.find(item => item.productoId === productoId);
-  
-  if (itemExistente) {
-    itemExistente.cantidad += cantidad;
-  } else {
-    carritos[usuarioId].items.push({
-      productoId,
-      cantidad,
-      precio: 25.99 // Precio temporal
-    });
-  }
-
-  // Recalcular totales
-  carritos[usuarioId].cantidad = carritos[usuarioId].items.reduce((total, item) => total + item.cantidad, 0);
-  carritos[usuarioId].total = carritos[usuarioId].items.reduce((total, item) => total + (item.precio * item.cantidad), 0);
-
-  res.json({
-    success: true,
-    data: carritos[usuarioId]
-  });
+// POST /api/carrito/:cliente_id/agregar - Agregar producto al carrito
+router.post('/:cliente_id/agregar', validarClienteId, (req, res, next) => {
+  req.params.usuario_id = req.params.cliente_id;
+  return CarritoController.agregarAlCarrito(req, res, next);
 });
 
-// Ruta para eliminar producto del carrito
-router.delete('/:usuarioId/eliminar/:productoId', (req, res) => {
-  const { usuarioId, productoId } = req.params;
-
-  if (carritos[usuarioId]) {
-    carritos[usuarioId].items = carritos[usuarioId].items.filter(item => item.productoId !== parseInt(productoId));
-    
-    // Recalcular totales
-    carritos[usuarioId].cantidad = carritos[usuarioId].items.reduce((total, item) => total + item.cantidad, 0);
-    carritos[usuarioId].total = carritos[usuarioId].items.reduce((total, item) => total + (item.precio * item.cantidad), 0);
-  }
-
-  res.json({
-    success: true,
-    data: carritos[usuarioId] || { items: [], total: 0, cantidad: 0 }
-  });
+// PUT /api/carrito/:cliente_id/:producto_id - Actualizar cantidad de un producto
+router.put('/:cliente_id/:producto_id', validarClienteId, (req, res, next) => {
+  req.params.usuario_id = req.params.cliente_id;
+  return CarritoController.actualizarCantidad(req, res, next);
 });
 
-// Ruta para limpiar el carrito
-router.delete('/:usuarioId/limpiar', (req, res) => {
-  const { usuarioId } = req.params;
-  
-  if (carritos[usuarioId]) {
-    carritos[usuarioId] = {
-      items: [],
-      total: 0,
-      cantidad: 0
-    };
-  }
-
-  res.json({
-    success: true,
-    data: carritos[usuarioId]
-  });
+// DELETE /api/carrito/:cliente_id/:producto_id - Eliminar producto del carrito
+router.delete('/:cliente_id/:producto_id', validarClienteId, (req, res, next) => {
+  req.params.usuario_id = req.params.cliente_id;
+  return CarritoController.eliminarDelCarrito(req, res, next);
 });
 
-module.exports = router;
+// DELETE /api/carrito/:cliente_id - Vaciar carrito completo
+router.delete('/:cliente_id', validarClienteId, (req, res, next) => {
+  req.params.usuario_id = req.params.cliente_id;
+  return CarritoController.vaciarCarrito(req, res, next);
+});
+
+// GET /api/carrito/:cliente_id/resumen - Obtener resumen del carrito para checkout
+router.get('/:cliente_id/resumen', validarClienteId, (req, res, next) => {
+  req.params.usuario_id = req.params.cliente_id;
+  return CarritoController.obtenerResumenCarrito(req, res, next);
+});
+
+// POST /api/carrito/:cliente_id/checkout - Procesar checkout y crear venta
+router.post('/:cliente_id/checkout', validarClienteId, (req, res, next) => {
+  req.params.usuario_id = req.params.cliente_id;
+  return CarritoController.procesarCheckout(req, res, next);
+});
+
+export default router;
