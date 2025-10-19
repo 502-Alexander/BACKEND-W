@@ -1,0 +1,241 @@
+/* Estilos para las tarjetas de servicios */
+.servicio-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.servicio-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.combo-card {
+  border: 2px solid #D6BB89;
+  background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
+}
+
+/* Badge de descuento */
+.descuento-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #e74c3c;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  z-index: 10;
+}
+
+.descuento-text {
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+/* Contenido de la tarjeta */
+.servicio-content {
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Header */
+.servicio-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.servicio-icon {
+  font-size: 2.5rem;
+  opacity: 0.8;
+}
+
+.servicio-tipo {
+  background: #081D3D;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.combo-card .servicio-tipo {
+  background: #D6BB89;
+  color: #081D3D;
+}
+
+/* Información principal */
+.servicio-info {
+  flex: 1;
+  margin-bottom: 20px;
+}
+
+.servicio-nombre {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #081D3D;
+  margin-bottom: 10px;
+  line-height: 1.3;
+}
+
+.servicio-descripcion {
+  color: #6c757d;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+/* Servicios incluidos en combos */
+.servicios-incluidos {
+  background: rgba(8, 29, 61, 0.1);
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.servicios-incluidos h4 {
+  color: #081D3D;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.servicios-incluidos ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.servicios-incluidos li {
+  color: #495057;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+/* Duración */
+.servicio-duracion {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.duracion-icon {
+  font-size: 1.1rem;
+}
+
+/* Precio */
+.servicio-precio {
+  margin-bottom: 20px;
+}
+
+.precio-con-descuento {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.precio-original {
+  font-size: 1rem;
+  color: #6c757d;
+  text-decoration: line-through;
+}
+
+.precio-actual {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #D6BB89;
+}
+
+.precio-normal {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #081D3D;
+}
+
+/* Acciones */
+.servicio-acciones {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.btn-full {
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: #081D3D;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #0a2447;
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  background: transparent;
+  color: #081D3D;
+  border: 2px solid #081D3D;
+}
+
+.btn-outline:hover {
+  background: #081D3D;
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* Efectos especiales para combos */
+.combo-card .servicio-nombre {
+  color: #081D3D;
+}
+
+.combo-card .servicio-icon {
+  color: #D6BB89;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .servicio-content {
+    padding: 20px;
+  }
+  
+  .servicio-nombre {
+    font-size: 1.3rem;
+  }
+  
+  .precio-actual,
+  .precio-normal {
+    font-size: 1.8rem;
+  }
+  
+  .servicio-header {
+    margin-bottom: 15px;
+  }
+  
+  .servicio-icon {
+    font-size: 2rem;
+  }
+}

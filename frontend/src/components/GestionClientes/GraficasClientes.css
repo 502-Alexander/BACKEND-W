@@ -1,0 +1,330 @@
+/* Estilos para el componente de gráficas de clientes */
+.graficas-clientes-container {
+  padding: 20px;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  min-height: 100vh;
+  margin-left: 250px; /* Margen para la sidebar */
+  width: calc(100% - 250px); /* Ancho ajustado */
+  max-width: 1400px; /* Ancho máximo para evitar que se extienda demasiado */
+  margin-right: auto; /* Centrar el contenido */
+}
+
+.graficas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.graficas-header h2 {
+  margin: 0;
+  color: #1f2937;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.periodo-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.periodo-selector label {
+  font-weight: 500;
+  color: #374151;
+}
+
+.periodo-select {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  font-size: 14px;
+  color: #374151;
+}
+
+.periodo-select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Estadísticas Generales */
+.estadisticas-generales {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.estadisticas-generales h3 {
+  margin: 0 0 20px 0;
+  color: #1f2937;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  background: linear-gradient(135deg, #f0e6d6 0%, #a6522c 100%);
+  border-radius: 8px;
+  border: 1px solid #a6522c;
+  box-shadow: 0 2px 8px rgba(166, 82, 44, 0.2);
+}
+
+.stat-icon {
+  font-size: 24px;
+  margin-right: 12px;
+  color: #1e5631;
+}
+
+.stat-content h4 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e5631;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.stat-content p {
+  margin: 3px 0 0 0;
+  color: #02735e;
+  font-size: 12px;
+  font-weight: 600;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Secciones de Gráficas */
+.grafica-section {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.grafica-section h3 {
+  margin: 0 0 20px 0;
+  color: #1f2937;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.grafica-container {
+  width: 100%;
+  height: 300px;
+}
+
+/* Tabla de Clientes Frecuentes */
+.tabla-frecuentes {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tabla-frecuentes h3 {
+  margin: 0 0 20px 0;
+  color: #1f2937;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.tabla-container {
+  overflow-x: auto;
+}
+
+.tabla-clientes-frecuentes {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.tabla-clientes-frecuentes th {
+  background: #f3f4f6;
+  padding: 12px 8px;
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.tabla-clientes-frecuentes td {
+  padding: 12px 8px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.tabla-clientes-frecuentes tr:hover {
+  background: #f9fafb;
+}
+
+.ranking {
+  text-align: center;
+  font-weight: 600;
+  color: #6b7280;
+  width: 50px;
+}
+
+.nombre {
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.telefono {
+  color: #6b7280;
+  font-family: monospace;
+}
+
+.badge-citas {
+  background: #3b82f6;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge-asistencia {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge-asistencia.alta {
+  background: #10b981;
+  color: white;
+}
+
+.badge-asistencia.media {
+  background: #f59e0b;
+  color: white;
+}
+
+.badge-asistencia.baja {
+  background: #ef4444;
+  color: white;
+}
+
+.fecha {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+/* Estados de carga y error */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #6b7280;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e5e7eb;
+  border-top: 4px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #ef4444;
+  text-align: center;
+}
+
+.error p {
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: #3b82f6;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #2563eb;
+}
+
+/* Responsive para tablets */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .graficas-clientes-container {
+    margin-left: 200px; /* Margen ajustado para sidebar más pequeña */
+    width: calc(100% - 200px);
+    padding: 15px;
+  }
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+  .graficas-clientes-container {
+    padding: 15px;
+    margin-left: 0; /* Sin margen en móviles */
+    width: 100%; /* Ancho completo en móviles */
+  }
+  
+  .graficas-header {
+    flex-direction: column;
+    gap: 15px;
+    align-items: stretch;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .grafica-container {
+    height: 250px;
+  }
+  
+  .tabla-clientes-frecuentes {
+    font-size: 12px;
+  }
+  
+  .tabla-clientes-frecuentes th,
+  .tabla-clientes-frecuentes td {
+    padding: 8px 4px;
+  }
+}

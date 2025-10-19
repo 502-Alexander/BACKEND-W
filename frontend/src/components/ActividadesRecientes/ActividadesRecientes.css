@@ -1,0 +1,234 @@
+/* Estilos para ActividadesRecientes */
+.actividades-recientes {
+  margin-top: 40px;
+  padding-top: 30px;
+  border-top: 2px solid #ecf0f1;
+}
+
+.actividades-recientes h2 {
+  color: #2c3e50;
+  font-size: 1.8em;
+  margin: 0 0 30px 0;
+  text-align: center;
+  font-weight: 600;
+}
+
+.actividades-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background: #f8f9fa;
+  border-radius: 10px;
+}
+
+.actividades-loading .spinner {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 15px;
+}
+
+.actividades-loading p {
+  color: #7f8c8d;
+  font-size: 1em;
+  margin: 0;
+}
+
+.actividades-lista {
+  max-height: 500px;
+  overflow-y: auto;
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border: 1px solid #ecf0f1;
+}
+
+.sin-actividades {
+  text-align: center;
+  padding: 40px;
+  color: #7f8c8d;
+}
+
+.sin-actividades p {
+  font-size: 1.2em;
+  margin: 0;
+}
+
+.actividad-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 15px;
+  margin-bottom: 15px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  border-left: 4px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.actividad-item:hover {
+  background: #ecf0f1;
+  transform: translateX(5px);
+}
+
+.actividad-item:last-child {
+  margin-bottom: 0;
+}
+
+.actividad-icono {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5em;
+  margin-right: 15px;
+  flex-shrink: 0;
+  color: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.actividad-contenido {
+  flex: 1;
+  min-width: 0;
+}
+
+.actividad-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.actividad-header h4 {
+  color: #2c3e50;
+  font-size: 1.1em;
+  font-weight: 600;
+  margin: 0;
+  flex: 1;
+}
+
+.actividad-tiempo {
+  color: #7f8c8d;
+  font-size: 0.9em;
+  font-weight: 500;
+  margin-left: 10px;
+  white-space: nowrap;
+}
+
+.actividad-detalles {
+  color: #5a6c7d;
+  font-size: 0.95em;
+  margin: 0 0 10px 0;
+  line-height: 1.4;
+}
+
+.actividad-tipo {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.tipo-badge {
+  color: white;
+  font-size: 0.75em;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.actividades-footer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.ver-todas-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.ver-todas-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* Scrollbar personalizado */
+.actividades-lista::-webkit-scrollbar {
+  width: 8px;
+}
+
+.actividades-lista::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.actividades-lista::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.actividades-lista::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .actividades-recientes h2 {
+    font-size: 1.5em;
+  }
+  
+  .actividad-item {
+    padding: 12px;
+  }
+  
+  .actividad-icono {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2em;
+    margin-right: 12px;
+  }
+  
+  .actividad-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .actividad-tiempo {
+    margin-left: 0;
+    margin-top: 5px;
+  }
+  
+  .actividad-header h4 {
+    font-size: 1em;
+  }
+  
+  .actividad-detalles {
+    font-size: 0.9em;
+  }
+}
+
+@media (max-width: 480px) {
+  .actividades-lista {
+    padding: 15px;
+  }
+  
+  .actividad-item {
+    padding: 10px;
+  }
+  
+  .ver-todas-btn {
+    padding: 10px 20px;
+    font-size: 0.9em;
+  }
+}

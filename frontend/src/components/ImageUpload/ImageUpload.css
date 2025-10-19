@@ -1,0 +1,147 @@
+/* Estilos para el componente de subida de imágenes */
+.image-upload-container {
+  background: white;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  margin: 20px 0;
+}
+
+.image-upload-container h3 {
+  color: #081D3D;
+  margin-bottom: 25px;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.upload-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 25px;
+}
+
+.image-upload-item {
+  border: 2px dashed #D6BB89;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.image-upload-item:hover {
+  border-color: #081D3D;
+  background-color: #f8f9fa;
+}
+
+.image-upload-item label {
+  display: block;
+  font-weight: bold;
+  color: #081D3D;
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+}
+
+.image-upload-item input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.image-upload-item input[type="file"]:hover {
+  border-color: #D6BB89;
+}
+
+.image-upload-item input[type="file"]:disabled {
+  background: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.image-preview {
+  margin-top: 15px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.image-preview img {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.image-preview p {
+  margin: 5px 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.upload-button {
+  width: 100%;
+  background: #D6BB89;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 20px;
+}
+
+.upload-button:hover:not(:disabled) {
+  background: #081D3D;
+  transform: translateY(-2px);
+}
+
+.upload-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.upload-info {
+  background: #e8f4f8;
+  border-left: 4px solid #D6BB89;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+.upload-info p {
+  margin: 0 0 10px 0;
+  font-weight: bold;
+  color: #081D3D;
+}
+
+.upload-info ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.upload-info li {
+  margin: 5px 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .upload-section {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .image-upload-container {
+    padding: 20px;
+  }
+  
+  .image-upload-container h3 {
+    font-size: 1.3rem;
+  }
+}

@@ -1,0 +1,108 @@
+/* Estilos del componente ResponsiveChart */
+.responsive-chart {
+  background: white;
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.responsive-chart:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.chart-header {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.chart-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--dark-gray);
+  margin: 0 0 0.5rem 0;
+  transition: font-size 0.3s ease;
+}
+
+.chart-subtitle {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0;
+  transition: font-size 0.3s ease;
+}
+
+.chart-content {
+  width: 100%;
+  position: relative;
+  transition: height 0.3s ease;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .responsive-chart {
+    padding: 1.25rem;
+  }
+  
+  .chart-header {
+    margin-bottom: 1.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .responsive-chart {
+    padding: 1rem;
+    border-radius: 12px;
+  }
+  
+  .chart-header {
+    margin-bottom: 1rem;
+  }
+  
+  .chart-title {
+    font-size: 1.1rem;
+  }
+  
+  .chart-subtitle {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .responsive-chart {
+    padding: 0.75rem;
+    border-radius: 10px;
+  }
+  
+  .chart-header {
+    margin-bottom: 0.75rem;
+  }
+  
+  .chart-title {
+    font-size: 1rem;
+  }
+  
+  .chart-subtitle {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .responsive-chart {
+    padding: 0.5rem;
+    border-radius: 8px;
+  }
+  
+  .chart-header {
+    margin-bottom: 0.5rem;
+  }
+  
+  .chart-title {
+    font-size: 0.9rem;
+  }
+  
+  .chart-subtitle {
+    font-size: 0.75rem;
+  }
+}
